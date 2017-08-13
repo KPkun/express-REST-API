@@ -36,6 +36,7 @@ passport.use("accessToken", new BearerStrategy(
             if (new Date() > token.expirationDate) {
                 Token.findOneAndRemove({ value: accessTokenHash }, function (err, token) {
                     if (err) { return callback(err); }
+                    return callback(null, false);
                 });
 
             } else {
