@@ -1,4 +1,6 @@
 // Load required packages
+// "use strict";
+
 var oauth2orize = require('oauth2orize');
 var User = require('./models/user');
 var Client = require('./models/client');
@@ -29,7 +31,7 @@ server.deserializeClient(function (id, callback) {
 
 server.exchange(oauth2orize.exchange.clientCredentials(function (client, scope, done) {
   var token = new Token();
-  let uidGenerator=new UIDGenerator(256, UIDGenerator.BASE62);
+  var uidGenerator=new UIDGenerator(256, UIDGenerator.BASE62);
   var tokenValue = uidGenerator.generateSync();
   token.value = crypto.createHash('sha1').update(tokenValue).digest('hex')
   var expiresIn = 1800
@@ -51,7 +53,7 @@ server.exchange(oauth2orize.exchange.clientCredentials(function (client, scope, 
       // No client found
       if (!client) { return done(null, false); }
       //Check if client is has this scope info registered.
-      for (let i = 0; i < scope.length; i++) {
+      for (var i = 0; i < scope.length; i++) {
         if (client.scope.indexOf(scope[i]) < 0) return done(null, false);
       }
 
@@ -64,12 +66,7 @@ server.exchange(oauth2orize.exchange.clientCredentials(function (client, scope, 
 
     });
 
-
   }
-
-
-
-
 
 }));
 
