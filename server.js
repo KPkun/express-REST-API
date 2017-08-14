@@ -11,6 +11,8 @@ var mongoose = require('mongoose');
 var uuid = require("node-uuid");
 var passport = require('passport');
 var token= require('./app/oauth2');
+var RateLimit = require('express-rate-limit');
+var config = require('./config');
 require('./app/auth');
 
 // import controllers
@@ -39,6 +41,21 @@ app.use(bodyParser.json());
 
 app.use(passport.initialize());
 
+var authRequestLimiter = new RateLimit({
+  windowMs: config.authRateLimiter.windowMs, 
+  delayAfter: config.authRateLimiter.delayAfter, 
+  max: config.authRateLimiter.max, 
+});
+
+app.use('/oauth/token', authRequestLimiter);
+
+var apiRequestLimiter = new RateLimit({
+  windowMs: config.apiRateLimiter.windowMs, 
+  delayAfter: config.apiRateLimiter.delayAfter, 
+  max: config.apiRateLimiter.max, 
+});
+
+app.use('/api/v1', apiRequestLimiter);
 
 
 // define port to run on
@@ -112,7 +129,13 @@ router.route('/clients')
 app.use('/api/v1', passport.authenticate('accessToken', { session: false }));
 app.use('/api/v1', router);
 
+
+
+
 // START THE SERVER
 // =============================================================================
 app.listen(port);
 console.log("Magic is happening at " + port);
+
+
+

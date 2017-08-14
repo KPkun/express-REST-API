@@ -12,6 +12,7 @@
     "bcrypt": "^1.0.2",
     "body-parser": "^1.17.2",
     "express": "^4.15.3",
+    "express-rate-limit": "^2.9.0",
     "mongoose": "^4.10.8",
     "node-uuid": "^1.4.8",
     "oauth2orize": "^1.8.1",
