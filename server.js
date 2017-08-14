@@ -12,6 +12,7 @@ var uuid = require("node-uuid");
 var passport = require('passport');
 var token= require('./app/oauth2');
 var RateLimit = require('express-rate-limit');
+var cors = require('cors');
 var config = require('./config');
 require('./app/auth');
 
@@ -38,6 +39,9 @@ mongoose.connect(uri).then(
 // configure app to use required modules
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
+
+app.use(cors());
+app.options('*', cors());
 
 app.use(passport.initialize());
 
